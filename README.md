@@ -15,3 +15,4 @@ Designed for use at the table via tablets or smartphones. It enables players (ty
  
 WEBRI-3.0 supports multiple scoring systems—including MP, IMP, POM, and DMP—and keeps all closed tournaments permanently archived for future consultation. 
 
+See it in action: https://www.bridgeclubmerate.it/tornei/gestione-tornei-a-coppie/
