@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Gestione Torneo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            /* Un gradiente verde scuro professionale invece del verde brillante */
+            background: linear-gradient(135deg, #1e5631 0%, #2d8249 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        .login-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+        .login-icon {
+            font-size: 48px;
+            color: #2d8249;
+            margin-bottom: 1rem;
+        }
+        .form-control {
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        .form-control:focus {
+            border-color: #2d8249;
+            box-shadow: 0 0 0 0.25 circle rgba(45, 130, 73, 0.25);
+        }
+        .btn-login {
+            background-color: #2d8249;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            width: 100%;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            transition: all 0.3s;
+        }
+        .btn-login:hover {
+            background-color: #1e5631;
+            transform: translateY(-2px);
+        }
+        .login-footer {
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container d-flex justify-content-center">
+    <div class="login-card">
+        <div class="login-icon">
+            <span class="material-icons" style="font-size: 50px;">lock</span>
+        </div>
+        <h4 class="mb-4 text-dark">Area Amministrativa</h4>
+        
+        <form action="./TorneoCopAdmin.php" method="post" name="pswd">
+            <div class="mb-3">
+                <label for="Login" class="form-label small text-muted text-uppercase">Inserire Password</label>
+        <!-- placeholder="••••••••" -->
+                <input 
+                    type="password" 
+                    class="form-control shadow-sm" 
+                    id="Login" 
+                    name="Login" 
+                    
+                    required 
+                    autofocus
+                >
+            </div>
+            
+            <button type="submit" class="btn btn-success btn-login shadow">
+                ACCEDI
+            </button>
+        </form>
+        
+        <div class="login-footer">
+            Sistema Gestione Tornei Bridge
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

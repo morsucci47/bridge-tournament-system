@@ -1,0 +1,70 @@
+13/10/21
+	) nella scheda inserimento-dati		-->tuno/maxTurni
+	) nella scheda di amministrazione 	-->lista dei tornei aperti
+
+
+02/11/21
+		Amministrazione
+	)Modificata la grafica del pannello di Amministrazione
+	)Inserimento della Classifica e dei Risultati per Board
+	)Percentuali colorate con sfumature dal rosso al verde
+	)tabella dei contratti
+
+		Gioco
+	)Pannello per l'inserimento del contratto e/o della licita
+	)Ispezione dei risultati delle altre coppie per una board giÃ  giocata
+	)Visione dei risultati globali (punti, perc. e contratti) alla chiusura del torneo
+
+15/11/21
+		Amministrazione
+	)Possibilità  di forzare un risultato ad un tavolo, anche in percentuali.
+	)Controllo della completezza del turno prima di generarne uno nuovo
+
+		Gioco
+	)Il pannello per l'inserimento del contratto e del risultato mantiene memoria dei dati.	
+
+08/01/22
+	) TorneiCopAperti: inserita anche la condizione Stato=0
+
+08/12/22
+	) classifica e risultati formato smart phone
+	) admin non deve creare nuova scheda
+25/12/23
+	) admin non apre una nuova scheda quando il torneo esiste
+	) gestione dei ritorni da classifica e dettagli
+	) classifica e dettagli visibili dai giocatori solo a completamento del torneo
+	) a controllo tirno aggiunta la possibilità di scambio coppie (errore di disposizione al tavolo)
+	) avvisi ssostituiti con alert
+04/12/24
+	) foto con tablet merate
+	x) controllo esistenza foto
+	x) dopo la foto diventa verde
+	x) "FARE FOTO" deve blincare
+	x) "MESCOLARE" deve blincare
+	x) controllare presenza di MANI DA MESCOLARE (presenti nei turni precedenti)
+	x) se TORNA da foto -> NON FATTA FOTO
+	) gestire più tornei aperti al gioco
+09/12/24
+	x) tutti ALERT
+	x) fare analisi stat per B4D descrizioni di 1F
+	x) inserire i tempi
+	
+09/03/25
+	x) allarme ritardi e fine turno con voce
+	x) gestione del torneo 3_5.txt
+	x) modifica contratti dei turni precedenti
+20/03/25	
+	x) rifatto gestione foto con anteprima sovrapposta
+xx/03/26
+	x) inserito il sistema di editing delle mani
+	x) collegamento alla procedura di analisi delle mani
+	x) fatto il restyling della parte amministrativa
+xx/06/26
+	x) fatto il restyling del modulo di gioco
+	x) gestione di più tornei in contemporanea (modulo "accesso")
+	x) nuovo calcolo del punteggio in JS (locale sul tablet)
+	x) nuova funzionalità nel pannello amministrativo per la scelta del torneo
+	   (menù a tendina per la scelta)	
+
+	
+	
