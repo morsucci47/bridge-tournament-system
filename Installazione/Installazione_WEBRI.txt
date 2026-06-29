@@ -104,6 +104,7 @@
 	<a href="http://my-path/IstruzioniUtente.pdf">Istruzioni Utente</a>
 	<a href="http://my-path/WEBRI.pdf">Breve Guida</a>
 
+	Vedere anche il file "TorneiCoppieIndex.html"
 
 
 
