@@ -290,10 +290,7 @@ echo"<br>";
 	}
 		
     echo "</table>";
-		echo " </td>";
-     	echo " </tr>";
-    echo "</table>";
-    echo "</body>";
+
 	
 	// RICAVA LA PSWD
 	$dati = $connessione->query("SELECT * FROM brdg_cop_pswd WHERE 1");
@@ -313,8 +310,29 @@ echo"<br>";
 	}
     // chiusura della connessione
     $connessione->close();
+?>
+
+  	<form action="TorneoCopAdmin.php?torneo=<?php echo $NomeTorneo ?>" method="POST">
+		<input type="hidden" name="password" value="<?php echo $PSWD ?>"/>
+	</form>
+
+	
+   <table style="HEIGHT: 10px" width="10" align="left" border="1">
+      <tbody>
+        <tr align="center" bgcolor=#f0e090>         
+         <td ><button style="background-color:LightGray;align:center;font-size: 36px;" onclick=<?php echo $AzioneBottone; ?>; ">Indietro</button></td>		  
+        </tr>
+      </tbody>
+    </table>
+	
 
 
+	</td>
+    </tr>
+    </table>
+    </body>
+
+<?php
 
 /*	
 		<form action="TorneoCopControlloTotale.php?torneo=<?php echo $NomeTorneo; ?>" method="post">	
@@ -326,21 +344,25 @@ echo"<br>";
         </tr>
     </table>	 	
 	</form>	
+
+
+
+   <table style="HEIGHT: 10px" width="10" align="left" border="1">
+      <tbody>
+        <tr align="center" bgcolor=#f0e090>         
+         <td ><button style="background-color:LightGray;align:center;font-size: 36px;" onclick=<?php echo $AzioneBottone; ?>; ">Indietro</button></td>		  
+        </tr>
+      </tbody>
+    </table>
+
+
 */
 	
  ?>
 
-  	<form action="TorneoCopAdmin.php?torneo=<?php echo $NomeTorneo ?>" method="POST">
-		<input type="hidden" name="password" value="<?php echo $PSWD ?>"/>
-	</form>
 	
 
-    <table style="HEIGHT: 10px" width="10" align="center" border="1">
-      <tbody>
-        <tr align="center" bgcolor=#f0e090>         
-         <td ><button style="background-color:LightGray;align:center;" onclick=<?php echo $AzioneBottone; ?>; ">Indietro</button></td>		  
-        </tr>
-      </tbody>
-    </table>
+ 
+
 
 	

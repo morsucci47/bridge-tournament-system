@@ -623,7 +623,7 @@ echo "<form action=\"./TorneoCopDettagli_1.php?torneo=".$NomeTorneo."&turno=".$N
     </table>
 </form>	 
 
-    <table style="HEIGHT: 10px" width="10" align="center" border="1">
+    <table style="HEIGHT: 10px" width="10" align="left" border="1">
       <tbody>
         <tr align="center">
           <td ><button style="background-color:LightGray;align:center; font-size: 36px;" onclick=<?php echo $AzioneBottone; ?>; return false;">Indietro</button></td>
