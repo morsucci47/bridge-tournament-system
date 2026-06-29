@@ -146,7 +146,7 @@ echo "<br>";
 	//QUI INSERISCE IL CALCOLO DELLE PERCENTUALI O DEI VOTI
 	include "TorneoCopCalcClassifica.php";
 		
-	
+echo"<div class=\"container-tabelle\">";	
 	if($Punteggio==1)  {
 		echo "<b><center><font size=\"5\" color=\"#0000FF\">CLASSIFICA PER MP</font></center></b>";
 		echo "<br>";
@@ -167,14 +167,14 @@ echo "<br>";
 
 
 echo"
-<div class=\"container-tabelle\">
+
 <table  align=\"center\" border=\"1\" width=\"300\">
 <tr align=\"center\">
 <td bgcolor=#f0e090> 
 	
 	<table align=\"center\" border=\"1\" cellspacing=\"1\" width=\"300\">
 	 <tr style=\"font-size: 25px;\" height=\"50\">
-      <td align=\"center\"><b> CLASSIFICA DEL TORNEO: </b>$NomeTorneo</td>
+      <td align=\"center\"><b>TORNEO: </b>$NomeTorneo</td>
       <td align=\"center\"><b>Turno </b>$NumTurno</td>
      </tr>
     </table>

@@ -63,7 +63,8 @@ $TipoTorneo= ["-","Howell","Mitchell"];
 $azione = $_POST['action'] ?? null;
 $pswd = $_POST['Login']  ?? null;
 
-if($NomeTorneo && $NomeTorneo != "*")  {
+//if($NomeTorneo && $NomeTorneo != "*")  {
+if($NomeTorneo)  {
 	// RICAVA I DATI DEL TORNEO DAL DATABASE
 	$sql = "SELECT * FROM `brdg_cop_tornei` WHERE `NomeTorneo`= '".$NomeTorneo."'";
 	$dati = $connessione->query($sql);
@@ -86,7 +87,7 @@ if($NomeTorneo && $NomeTorneo != "*")  {
 	}	
 }else{
 	
-	$NomeTorneo ="";
+	$NomeTorneo ="Non selezionato";
 	$turno = 0;
 	$NumTurni = 0;
 	$Stato = 99;
@@ -107,7 +108,10 @@ echo"PSWD -----> ".$PSWD;
 echo"<br>";
 echo"pswd 1-----> ".$pswd;
 echo"<br>";
+
 echo"NomeTorneo -----> ".$NomeTorneo;
+echo"<br>";
+echo"NomeTorneoInput -----> ".$NomeTorneoInput;
 echo"<br>";
 echo"ID_torneo-----> ".$ID_torneo;
 echo"<br>";
@@ -125,7 +129,7 @@ if ($azione == NULL && $pswd != NULL) {
 		<div class='container mt-5'><div class='alert alert-danger text-center'><h4>PASSWORD ERRATA</h4><a href='TorneoCopLogin.html' class='btn btn-outline-danger mt-3'>Torna al Login</a></div></div>");
 	}
 
-	$msg = "Selezionare il nome del torneo o dell' Archivio";
+	$msg = "Selezionare il torneo o l' Archivio e APRIRE";
 	
 }
 //=================================================
@@ -173,6 +177,8 @@ echo "Stato: ".$Stato ;
 echo  "<br>";
 */        
         if (!is_numeric($ID_torneo)) {
+			//echo "<script>alert('ATTENZIONE: INSERIRE IL NOME DEL TORNEO');</script>";
+			//goto modulo;
             $connessione->close();
             exit('<div class="container"><div class="content"><div class="alert alert-warning">Il torneo "'. $NomeTorneo.'" non esiste</div></div></div>');
         }
@@ -638,7 +644,7 @@ echo"<br>";
 				}
 			</style>
 
-			<form action="TorneoCopAdmin.php?torneo=<?php echo $NomeTorneo; ?>" method="POST">
+			<form action="TorneoCopAdmin.php?torneo=<?php echo $NomeTorneoInput; ?>" method="POST">
 				<input type="hidden" name="password" value="<?php echo $pswd; ?>">
 				<input type="hidden" name="torneo" value="<?php echo $NomeTorneo; ?>">
 

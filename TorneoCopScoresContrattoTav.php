@@ -26,6 +26,9 @@ error_reporting(E_ALL);
 	<link rel="stylesheet" href="css/skeleton.css">
 	<link rel="stylesheet" href="css/layout.css">
 
+<script>
+sessionStorage.setItem('urlProvenienza', window.location.href);	
+</script>
 
 <style>
 		#decimal-input {
@@ -114,6 +117,7 @@ error_reporting(E_ALL);
     padding: 2px;
     text-align: center;
     font-weight: bold;
+    font-size: 16px;      
 }
 
 /* Gestione responsive dei select interni alla tabella */
@@ -1041,10 +1045,10 @@ exit();
 
 	if($azione=="<-"){
 		if($orig == "admin")  {
-			header("Location: TorneoCopControllo.php?torneo=".$torneo."&turno=".$turno);
+			header("Location:".$home_proc."/TorneoCopControllo.php?torneo=".$torneo."&turno=".$turno);
 			exit();
 		}else{	
-			header("Location: TorneoCopAccessoContrattoTav.php?Torneo=$torneo");
+			header("Location:".$home_proc."/TorneoCopAccessoContrattoTav.php?Torneo=$torneo");
 			exit();
 		}
 	}
@@ -1244,7 +1248,7 @@ noOK:
 
 //  *****************************************************************************
 
-if($azione=="Vedi altri risultati") {
+	if($azione=="Vedi altri risultati") {
 //echo "TurnoInizio   ". $TurnoInizio ;
 //echo  "<br>";	
 		if($TurnoInizio) {
@@ -1258,12 +1262,14 @@ if($azione=="Vedi altri risultati") {
 	}
 
 //  *****************************************************************************
-    if($azione=="Vedi foto") {
+/*
+if($azione=="Vedi foto") {
 
 			header("Location:".$home_archive."/VediFoto.php?torneo=$torneo&board=$boardAtt&turno=$turno&tavolo=$NumTavolo");
 			exit();
 			//  *****************************************************************************
 	}
+*/	
 //  *****************************************************************************
 
 
@@ -1748,10 +1754,10 @@ echo  "<br>";
 		
 		// bgcolor= "yellow"  bgcolor= #eee8aa 
 		if($score_NS==NULL) { ?>
-				<td  width=30%  align="center"> 
+				<td  width=45%  align="center"> 
 					<input align="center"  style="font-size:36px;vertical-align: middle;width:130px;"  name="MP_NS_<?php echo $kboard;?>"  value="">
 				</td>
-				<td  width=30%  align="center">
+				<td  width=45%  align="center">
 					<input align="center"  style="font-size:36px;vertical-align: middle;width:130px;"  name="MP_EW_<?php echo $kboard;?>"  value="">
 				</td>   								
 <?php	}else if($score_NS==0) { 
@@ -2068,7 +2074,7 @@ risultati:
 //*************************************************************************	
 //*************************************************************************	
 //*************************************************************************	
-//***************** MASCHERA DI NSERIMENTO CONTRATTO **********************	
+//***************** MASCHERA DI INSERIMENTO CONTRATTO **********************	
 //*************************************************************************	
 //*************************************************************************	
 //*************************************************************************	

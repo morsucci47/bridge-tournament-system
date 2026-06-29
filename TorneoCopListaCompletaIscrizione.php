@@ -478,13 +478,13 @@ include "dbConnessione.php";
 modulo:
 //##############################################################################################
 //       ELENCO  GIOCATORI   E  FORM DI INSERIMENTO		
-    echo "<br>";
-	echo " <p align=\"center\"><font color=\"#ff0000\" size=\"5\">TORNEO: ".$torneo."</font></p>";	
 //echo "  TORNEO: ".$NomeTorneo;
 //echo "<br>";
 //------------------------------------------------------
 
 echo"<div class=\"container-tabelle\">";		
+    echo "<br>";
+	echo " <p align=\"center\"><font color=\"#ff0000\" size=\"5\">TORNEO: ".$torneo."</font></p>";	
 
 	//echo "<p align=\"center\"><font  style= \"text-align: center \" color=\"#000000\" >
 		// 	 N.Coppie iscritte: ".$Niscritti."  -----  Turno: ".$turno."</font></p>";	
