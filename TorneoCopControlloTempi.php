@@ -4,12 +4,12 @@ include "dbConnessione.php";
 echo "<body bgcolor=\"green\">";
 
 //  RICEVE IL PARAMETRO TURNO IN ESAME
-	$azione = $_POST['action'];
-	$NomeTorneo= $_GET['torneo'];
-	$Origine= $_GET['orig'];
+	$azione = $_POST['action'] ?? NULL;
+	$NomeTorneo= $_GET['torneo'] ?? NULL;
+	$Origine= $_GET['orig'] ?? NULL;
 	//$turnoOsservato= $_GET['turno'];
 	// riceve da se stesso il tavolo
-	$board= $_POST['board'];
+	$board= $_POST['board'] ?? NULL;
 //echo" Tavolo ".$Tavolo;
 //echo"<br>";
 	
@@ -19,7 +19,7 @@ echo "<body bgcolor=\"green\">";
 	$dati = $connessione->query($sql);
 	$row = $dati->fetch_assoc(); 
 	$ID_torneo= $row['ID_torneo'];
-	//$turno= $row['TurnoAttuale'];	
+	$Tipo= $row['Tipo'];	
 	$NboardsXturno= $row['BoardsXturno'];		
  	$SecondiInizio= $row['Inizio'];	
     if (!is_numeric($ID_torneo)) {
@@ -83,7 +83,7 @@ echo "<br>";
 	$k=0;
 	while($row) {
 		$k++;
-		$coppiaID= $row['coppiaID'];
+		$coppiaID= $row['coppiaID'] ?? NULL;
 		//  CASO DI TORNEO MITCHELL
 		$coppiaID_= $coppiaID;		
 		if($coppiaID > $Niscritti/2 && $Tipo==2) $coppiaID_= $coppiaID-$Niscritti/2 + 100;
@@ -195,6 +195,9 @@ echo "</table>";
 		$coppiaEW= $row['coppiaEW'];
 		$Secondi= $row['secondi'];
 
+		$coppiaEW_= $coppiaEW;		
+		if($coppiaEW > $Niscritti/2 && $Tipo==2) $coppiaEW_= $coppiaEW-$Niscritti/2 + 100;
+
 		// CALCOLA IL MASSIMO TEMPO DEL TURNO ATTUALE
 		if($turno > $TurnoAtt)  {
 			$SecondiRif= $SecondiPrima;
@@ -275,7 +278,7 @@ echo"<br>";
         <td align=\"center\"><strong>$coppiaNS</strong></td>
 									
         <td align=\"center\"><strong>-</strong></td>
-        <td align=\"center\"><strong>$coppiaEW</strong></td>
+        <td align=\"center\"><strong>$coppiaEW_</strong></td>
         <td align=\"center\"><strong>$punti</strong></td>";
 		
 		if($Secondi==$SecondiMax) {
@@ -290,7 +293,10 @@ echo"<br>";
 	}
 		
     echo "</table>";
-
+		echo " </td>";
+     	echo " </tr>";
+    echo "</table>";
+    echo "</body>";
 	
 	// RICAVA LA PSWD
 	$dati = $connessione->query("SELECT * FROM brdg_cop_pswd WHERE 1");
@@ -310,29 +316,8 @@ echo"<br>";
 	}
     // chiusura della connessione
     $connessione->close();
-?>
-
-  	<form action="TorneoCopAdmin.php?torneo=<?php echo $NomeTorneo ?>" method="POST">
-		<input type="hidden" name="password" value="<?php echo $PSWD ?>"/>
-	</form>
-
-	
-   <table style="HEIGHT: 10px" width="10" align="left" border="1">
-      <tbody>
-        <tr align="center" bgcolor=#f0e090>         
-         <td ><button style="background-color:LightGray;align:center;font-size: 36px;" onclick=<?php echo $AzioneBottone; ?>; ">Indietro</button></td>		  
-        </tr>
-      </tbody>
-    </table>
-	
 
 
-	</td>
-    </tr>
-    </table>
-    </body>
-
-<?php
 
 /*	
 		<form action="TorneoCopControlloTotale.php?torneo=<?php echo $NomeTorneo; ?>" method="post">	
@@ -344,25 +329,21 @@ echo"<br>";
         </tr>
     </table>	 	
 	</form>	
-
-
-
-   <table style="HEIGHT: 10px" width="10" align="left" border="1">
-      <tbody>
-        <tr align="center" bgcolor=#f0e090>         
-         <td ><button style="background-color:LightGray;align:center;font-size: 36px;" onclick=<?php echo $AzioneBottone; ?>; ">Indietro</button></td>		  
-        </tr>
-      </tbody>
-    </table>
-
-
 */
 	
  ?>
 
+  	<form action="TorneoCopAdmin.php?torneo=<?php echo $NomeTorneo ?>" method="POST">
+		<input type="hidden" name="password" value="<?php echo $PSWD ?>"/>
+	</form>
 	
 
- 
-
+    <table style="HEIGHT: 10px" width="10" align="center" border="1">
+      <tbody>
+        <tr align="center" bgcolor=#f0e090>         
+         <td ><button style="background-color:LightGray;align:center;" onclick=<?php echo $AzioneBottone; ?>; ">Indietro</button></td>		  
+        </tr>
+      </tbody>
+    </table>
 
 	

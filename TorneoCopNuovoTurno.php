@@ -30,6 +30,10 @@ include "dbConnessione.php";
 
 
 // Definisce le variaobili
+$Niscritti= 0;
+$turnoAttuale= 0;
+ 
+
 //$turni=[[]];   // numero-incontro, GIOCATORI
 //$turniPrec=[[]]; //turni precedenti
 
@@ -44,13 +48,13 @@ include "dbConnessione.php";
 		exit( "<body bgcolor=\"#f0e090\"><b><center>Il torneo non esiste</center></b></body>");
     }
 	$row = $dati->fetch_assoc();
-	$ID_torneo= $row['ID_torneo'];
-	$TurnoAttuale= $row['TurnoAttuale'];		
-	$Nturni= $row['Turni'];		
-	$NboardsXturno= $row['BoardsXturno'];		
-	$Punteggio= $row['Punteggio'];		
-	$Tipo= $row['Tipo'];		
-	$Ntavoli= $row['Tavoli'];	
+	$ID_torneo= $row['ID_torneo'] ?? NULL;
+	$TurnoAttuale= $row['TurnoAttuale'] ?? 0;		
+	$Nturni= $row['Turni'] ?? 0;		
+	$NboardsXturno= $row['BoardsXturno'] ?? 0;		
+	$Punteggio= $row['Punteggio'] ?? 0;		
+	$Tipo= $row['Tipo'] ?? 0;		
+	$Ntavoli= $row['Tavoli'] ?? 0;	
 /*	
 echo"TurnoAttuale= ".$TurnoAttuale;
 echo"<br>";	   
@@ -69,7 +73,7 @@ echo"<br>";
 	$sql="SELECT COUNT(*) FROM `brdg_cop_coppie` WHERE `torneoID`=".$ID_torneo;
 	$dati= $connessione->query($sql); 
 	$row = $dati->fetch_array();
-	$Niscritti= $row[0];
+	$Niscritti= $row[0] ?? NULL;
    	if ($Niscritti%2 !=0) {
 		// AGGIUNGIAMO BYE1 E BYE2	
 /*		
@@ -156,10 +160,10 @@ echo"<br>";
 */			
 			$Turno++;
 		
-			$Tavolo= strcompatta($columns[0]);
-		  	$Boa= strcompatta($columns[1]);
-		  	$CoppiaNS= strcompatta($columns[2]);
-		  	$CoppiaEW= strcompatta($columns[3]);
+			$Tavolo= strcompatta($columns[0]) ?? NULL;
+		  	$Boa= strcompatta($columns[1]) ?? NULL;
+		  	$CoppiaNS= strcompatta($columns[2]) ?? NULL;
+		  	$CoppiaEW= strcompatta($columns[3]) ?? NULL;
 		
 /*	
 echo"Tavolo= ".$Tavolo;

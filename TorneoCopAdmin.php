@@ -1,5 +1,108 @@
-
+<?php
+ob_start(); // Trattiene l'output e risolve l'errore degli header
+?>
 <script>
+/*
+document.addEventListener('DOMContentLoaded', () => {
+    const selectTorneo = document.getElementById('select-torneo');
+    const inputDestinazione = document.getElementById('input-torneo');
+    
+    const btnElimina = document.getElementById('btn-elimina');
+    const btnChiudi = document.getElementById('btn-chiudi');
+    
+    // Elementi della modale Bootstrap
+    const modalElement = document.getElementById('modalConferma');
+    const modal = new bootstrap.Modal(modalElement);
+    const modalTitolo = document.getElementById('modalTitolo');
+    const modalTesto = document.getElementById('modalTesto');
+    const modalNomeTorneo = document.getElementById('modalNomeTorneo');
+    const modalBtnConferma = document.getElementById('modalBtnConferma');
+
+    // Gestione tendina
+    selectTorneo.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex]; 
+        const nomeTorneo = selectedOption.getAttribute('data-nome');
+        if (nomeTorneo) inputDestinazione.value = nomeTorneo;
+    });
+
+    // Funzione per aprire la modale personalizzata
+    function gestisciAzione(bottone, titolo, testo, classeBottone, valoreAction) {
+        if (!bottone) return;
+
+        bottone.addEventListener('click', function() {
+            const nomeTorneoAttuale = inputDestinazione.value || "selezionato";
+
+            // Configura i testi della modale
+            modalTitolo.innerText = titolo;
+            modalTesto.innerText = testo;
+            
+            // EVIDENZIAMO il nome del torneo!
+            modalNomeTorneo.innerText = nomeTorneoAttuale; 
+
+            // Personalizza il bottone di conferma della modale (colore e valore)
+            modalBtnConferma.className = `btn ${classeBottone}`;
+            modalBtnConferma.name = "action";
+            modalBtnConferma.value = valoreAction;
+
+            // Mostra la modale
+            modal.show();
+        });
+    }
+
+    // Configura i due bottoni
+    gestisciAzione(btnElimina, "Elimina Torneo", "ATTENZIONE: Azione irreversibile. Stai per cancellare:", "btn-danger", "Cancellazione TORNEO");
+    gestisciAzione(btnChiudi, "Chiusura Torneo", "Stai per chiudere il torneo:", "btn-warning", "Chiusura");
+    gestisciAzione(btnRiapri, "Riapertura torneo", "Stai per riaprire il torneo:", "btn-warning", "Riapertura");
+    
+});
+*/
+document.addEventListener('DOMContentLoaded', () => {
+    const selectTorneo = document.getElementById('select-torneo');
+    const inputDestinazione = document.getElementById('input-torneo');
+    
+    // Selezioniamo entrambi i bottoni
+    const btnElimina = document.getElementById('btn-elimina');
+    const btnChiudi = document.getElementById('btn-chiudi');
+    const btnRiapri = document.getElementById('btn-riapri');
+
+    // 1. Gestione del cambio di selezione nella tendina
+    selectTorneo.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex]; 
+        const nomeTorneo = selectedOption.getAttribute('data-nome');
+        
+        if (nomeTorneo) {
+            inputDestinazione.value = nomeTorneo;
+            console.log("Torneo selezionato:", nomeTorneo);
+        }
+    });
+
+    // Funzione helper per applicare la conferma dinamica
+    function applicaConfermaDinamica(bottone, testoMessaggio) {
+        if (!bottone) return; // Sicurezza nel caso il bottone non esista nella pagina
+        
+        bottone.addEventListener('click', function(event) {
+            // Recupera il nome attuale del torneo dall'input
+            const nomeTorneoAttuale = inputDestinazione.value || "selezionato";
+            
+            // Componiamo il messaggio inserendo il nome del torneo
+			// Usiamo le virgolette e i trattini per farlo saltare all'occhio
+			const messaggioCompleto = `${testoMessaggio}\n\n»» ${nomeTorneoAttuale.toUpperCase()} ? ««`;           
+ 			//const messaggioCompleto = `${testoMessaggio}\n\n${nomeTorneoAttuale} ?`;
+            
+            // Se l'utente annulla, blocchiamo il submit
+            if (!confirm(messaggioCompleto)) {
+                event.preventDefault();
+            }
+        });
+    }
+
+    // 2. Colleghiamo la logica ai rispettivi bottoni con i loro messaggi specifici
+    applicaConfermaDinamica(btnElimina, "ATTENZIONE: Azione irreversibile. Cancellare il torneo:");
+    applicaConfermaDinamica(btnChiudi, "Chiudere il torneo:");
+    applicaConfermaDinamica(btnRiapri, "Riaprire il torneo:");
+});
+/*
+
 document.addEventListener('DOMContentLoaded', () => {
     // Selezioniamo il tag select usando il suo ID
     const selectTorneo = document.getElementById('select-torneo');
@@ -20,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-/*
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -44,8 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 */
 </script>
-
-
 <?php 
 // INTERFACCIA DI AMMINISTRAZIONE DEI TORNEI DI BRIDGE A COPPIE
 // ACCESSO AL DATABASE
@@ -54,27 +155,38 @@ include "dbConnessione.php";
 //=================================================
 // INIZIALIZZAZIONE
 //=================================================
-$NomeTorneo = $_GET['torneo'];
-if(!$NomeTorneo)  $NomeTorneo=  $_POST['torneo'];
+$NomeTorneo = filter_input(INPUT_GET, 'torneo') ?? filter_input(INPUT_POST, 'torneo') ?? NULL;
+
+//$NomeTorneo = $_GET['torneo'] ?? NULL;
+//if(!$NomeTorneo)  $NomeTorneo=  $_POST['torneo'] ?? NULL;
 $NomeTorneoInput= $NomeTorneo;
 
 $TipoTorneo= ["-","Howell","Mitchell"];
 
 $azione = $_POST['action'] ?? null;
 $pswd = $_POST['Login']  ?? null;
+$NumTavoli = 0;
 
-//if($NomeTorneo && $NomeTorneo != "*")  {
-if($NomeTorneo)  {
+	$turno = 0;
+	$NumTurni = 0;
+	$Stato = 99;
+	$Tipo = 0;
+	$Niscritti = 0;
+
+$msg= "";
+
+if($NomeTorneo && $NomeTorneo != "*")  {
+//if($NomeTorneo)  {
 	// RICAVA I DATI DEL TORNEO DAL DATABASE
 	$sql = "SELECT * FROM `brdg_cop_tornei` WHERE `NomeTorneo`= '".$NomeTorneo."'";
 	$dati = $connessione->query($sql);
 	if($dati)  {
 		$row = $dati->fetch_assoc(); 
-		$ID_torneo = $row['ID_torneo'];
-		$turno = $row['TurnoAttuale'];
-		$NumTurni = $row['Turni'];
-		$Stato = $row['Stato'];
-		$Tipo = $row['Tipo'];
+		$ID_torneo = $row['ID_torneo'] ?? NULL;
+		$turno = $row['TurnoAttuale'] ?? 0;
+		$NumTurni = $row['Turni'] ?? 0;
+		$Stato = $row['Stato'] ?? 0;
+		$Tipo = $row['Tipo'] ?? 0;
 
 		// LEGGE IL NUMERO DI ISCRITTI
 		if (is_numeric($ID_torneo)) {
@@ -157,12 +269,16 @@ if ($azione == NULL && $pswd == NULL) {
 // IL CONTROLLO VIENE DAL FORM INTERNO -- GESTIONE DELLE AZIONI
 //=================================================
 if ($azione != NULL) {
-    if ($azione == "Cancellazione Turno") {
+    if 	( $azione == "Cancellazione Turno"
+		||$azione == "Cancellazione TORNEO"
+		||$azione == "Chiusura"
+		||$azione == "Riapertura"
+		) {
         //$NomeTorneo = $_GET['torneo'];
         $sql = "SELECT * FROM `brdg_cop_tornei` WHERE `NomeTorneo`= '".$NomeTorneo."'";
         $dati = $connessione->query($sql);
-        if (!$dati) {
-            echo "<script>alert('ATTENZIONE: TORNEO NON ESISTENTE');</script>";
+		if ($dati->num_rows == 0) {
+	        echo "<script>alert('ATTENZIONE: TORNEO NON ESISTENTE');</script>";
             goto modulo;
         }
         $row = $dati->fetch_assoc(); 
@@ -215,16 +331,22 @@ echo  "<br>";
 //echo"ID_torneo-----> ".$ID_torneo;
 //echo"<br>";
 		//$sql = "DELETE FROM `brdg_cop_tornei` WHERE `NomeTorneo`= '".$NomeTorneo."'";
-        $sql = "DELETE FROM `brdg_cop_tornei` WHERE `ID_torneo`= $ID_torneo";
-        $msg = "Torneo cancellato: $NomeTorneo ";
-        $dati = $connessione->query($sql);
-        if (!$dati) {
-            echo "<script>alert('ATTENZIONE: TORNEO NON APERTO');</script>";
-        }
-		//  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		// deve cancellare anche tutti i dati relativi: coppie, scores...
-        $dati = $connessione->query("DELETE FROM `brdg_cop_scores` WHERE torneoID=".$ID_torneo);
-        $dati = $connessione->query("DELETE FROM `brdg_cop_coppie` WHERE torneoID=".$ID_torneo);
+        if ((int)$Stato === 1) {
+			$sql = "DELETE FROM `brdg_cop_tornei` WHERE `ID_torneo`= $ID_torneo";
+			$msg = "Torneo cancellato: $NomeTorneo ";
+			$dati = $connessione->query($sql);
+			if (!$dati) {
+				echo "<script>alert('ATTENZIONE: TORNEO NON APERTO');</script>";
+			}
+			//  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			// deve cancellare anche tutti i dati relativi: coppie, scores...
+			$dati = $connessione->query("DELETE FROM `brdg_cop_scores` WHERE torneoID=".$ID_torneo);
+			$dati = $connessione->query("DELETE FROM `brdg_cop_coppie` WHERE torneoID=".$ID_torneo);
+
+			$NomeTorneoInput= ""; 
+        } else {
+			echo "<script>alert('ATTENZIONE: IL TORNEO NON RISULTA CHIUSO');</script>";
+        }				
 		
      }
 //**********************************************************************************
@@ -588,10 +710,19 @@ echo"<br>";
                         <button type="submit" name="action" value="Apertura" class="btn btn-primary btn-custom">
                             <span class="material-icons">play_circle</span> Apri / Crea Torneo
                         </button>
-                        <button type="submit" name="action" value="Chiusura" class="btn btn-outline-secondary btn-custom" onclick="return confirm('Chiudere il torneo?')">
+
+						<button type="submit" name="action" value="Chiusura" id="btn-chiudi" class="btn btn-outline-secondary btn-custom">
+							<span class="material-icons">lock</span> Chiudi Torneo
+						</button>						
+<!--
+                        <button type="submit" name="action" value="Chiusura" class="btn btn-outline-secondary btn-custom" onclick="return confirm('Chiudere il torneo:\n\n<?php echo $NomeTorneo; ?>?')">
                             <span class="material-icons">lock</span> Chiudi Torneo
                         </button>
-                        <button type="submit" name="action" value="Riapertura" class="btn btn-outline-secondary btn-custom" onclick="return confirm('Riaprire il torneo?')">
+						<button type="submit" name="action" value="Riapertura" class="btn btn-outline-secondary btn-custom" onclick="return confirm('Riaprire il torneo:\n\n<?php echo $NomeTorneo; ?>?')">
+                            <span class="material-icons">lock_open</span> Riapri Torneo
+                        </button>
+-->                        
+						<button type="submit" name="action" value="Riapertura" id="btn-riapri" class="btn btn-outline-secondary btn-custom" >
                             <span class="material-icons">lock_open</span> Riapri Torneo
                         </button>
                     </div>
@@ -602,10 +733,19 @@ echo"<br>";
                 <div class="section-title text-danger">Zona Pericolo</div>
                 <form method="post">
                     <input type="hidden" name="password" value="<?php echo $pswd; ?>">
-                    <input type="hidden" name="torneo" value="<?php echo $NomeTorneo; ?>">
-                    <button type="submit" name="action" value="Cancellazione TORNEO" class="btn btn-danger w-100 btn-custom" onclick="return confirm('ATTENZIONE: Azione irreversibile. Cancellare il torneo ?')">
+                <!--    <input type="hidden" name="torneo" value="<?php echo $NomeTorneo; ?>"> -->
+                    <input type="hidden" name="torneo" value="<?php echo $NomeTorneoInput; ?>">
+<!--					<input id="input-torneo" type="text" style="font-size:24px;"  name="torneo" class="form-control form-control-lg fw-bold" value="<?php echo $NomeTorneoInput; ?>" >
+						-->
+					<button type="submit" name="action" value="Cancellazione TORNEO" id="btn-elimina" class="btn btn-danger w-100 btn-custom">
+						<span class="material-icons">delete_forever</span> ELIMINA TORNEO
+					</button>
+<!--
+                    <button type="submit" name="action" value="Cancellazione TORNEO" class="btn btn-danger w-100 btn-custom" 
+								onclick="return confirm('ATTENZIONE: Azione irreversibile. Cancellare il torneo:\n\n<?php echo $NomeTorneo; ?> ?')">
                         <span class="material-icons">delete_forever</span> ELIMINA TORNEO
                     </button>
+-->
                 </form>
             </div>
         </div>

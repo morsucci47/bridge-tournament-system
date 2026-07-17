@@ -56,13 +56,13 @@
 include "dbConnessione.php";
 
 //  ------------------------------
-	$azione = $_POST['action'];
+	$azione = $_POST['action'] ?? NULL;
 //echo "azione=  ".$azione;			   
 //echo "<br>";
 
-	$NomeA= $_POST['NomeA'];
-	$NomeB= $_POST['NomeB'];
-	$Nid= $_POST['Nid'];
+	$NomeA= $_POST['NomeA'] ?? NULL;
+	$NomeB= $_POST['NomeB'] ?? NULL;
+	$Nid= $_POST['Nid'] ?? NULL;
 	//$Telefono= $_POST['Telefono'];
 	//$Mail= $_POST['Mail'];
 	//$Associazione= $_POST['Associazione'];
@@ -72,7 +72,7 @@ include "dbConnessione.php";
 	//$Origine= $_GET['orig'];
 	
 	$torneo= $NomeTorneo;
-	$scelta= $_GET['scelta'];
+	$scelta= $_GET['scelta'] ?? NULL;
 	if($scelta=="ok") {
 		$azione = "Canc ID";		
 	}	

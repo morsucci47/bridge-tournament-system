@@ -63,7 +63,7 @@
 	
 <?php 
 //  SE IL CONTROLLO VIENE DA SCORES RICEVE IL NOME DEL TORNEO
-	$TorneoScelto= $_GET['Torneo'];
+	$TorneoScelto= $_GET['Torneo'] ?? NULL;
      
 //***************************************************************************
 //		cerca I tornei aperti con turno attuale > 0																	 
@@ -74,7 +74,7 @@ include_once "dbConnessione.php";
 			$sql= "SELECT * FROM `brdg_cop_tornei`  WHERE `TurnoAttuale`>0 AND `Stato`=0 ORDER BY ID_torneo DESC LIMIT 1"; 
 			$dati = $connessione->query($sql);
 			$row = $dati->fetch_assoc(); 
-			$TorneoScelto= $row['NomeTorneo'];
+			$TorneoScelto= $row['NomeTorneo'] ?? NULL;
 		}
 
 
@@ -86,6 +86,8 @@ echo"<tr >";
 echo"<td align=\"center\" colspan=\"5\">";		
 		if(!$row) {
 			echo"<div  style=\"font-size:24px; background-color: yellow; color:red;\"  align=\"center\"><strong>NON CI SONO TORNEI IN CORSO</strong></div>";
+			$NumCoppie= 0;
+			goto FormTorneoChiuso;
 		}else{
 			echo"<div   style=\"font-size:24px; background-color: yellow; color: white;\" align=\"center\"><strong>TORNEI IN CORSO</strong></div>";			
 		}
@@ -207,25 +209,31 @@ document.addEventListener('DOMContentLoaded', () => {
     $sql= "SELECT * FROM brdg_cop_tornei WHERE NomeTorneo=\"".$TorneoScelto."\"";
     $dati = $connessione->query($sql);
     $row = $dati->fetch_assoc(); 
-    $ID_torneo= $row['ID_torneo'];
+    $ID_torneo= $row['ID_torneo'] ?? NULL;
 
 	//********************************************
 	//   CREA LA LISTA DEI TAVOLI
 	//********************************************
+
 /*
 <tr align=\"center\">
 <td colspan=\"3\" bgcolor=\"#FFFF00\" align=\"center\"><strong>Selezione (* : vedi la lista storica dei tornei)</strong></td>
 </tr>
 <p><strong>NON ESISTE</strong></p>
 */
-	$sql="SELECT COUNT(*) FROM `brdg_cop_coppie` WHERE `torneoID`=".$ID_torneo." ORDER BY `coppiaID`" ;			   
+	if($ID_torneo) {
+		$sql="SELECT COUNT(*) FROM `brdg_cop_coppie` WHERE `torneoID`=".$ID_torneo." ORDER BY `coppiaID`" ;			   
 //echo "sql=  ".$sql;			   
 //echo "<br>";
-	$dati= $connessione->query($sql); 
-	
-	if($dati) $row = $dati->fetch_array();	
+		$dati= $connessione->query($sql); 
+		
+		if($dati) $row = $dati->fetch_array();	
 
-	$NumCoppie= $row[0];
+		$NumCoppie= $row[0];
+	}else{
+		$NomeTorneo= "----";
+		$NumCoppie= 2;
+	}	
 echo"
 <table align=\"center\" width=\"260\">
 <tbody>
@@ -245,12 +253,16 @@ echo"
 */
 //echo"<input name=\"torneo\" size=\"18\" style=\"font-size:24px;\" type=\"text\" value=\"".$NomeTorneo."\">
 echo"<input id=\"input-torneo\" name=\"torneo\" size=\"18\" style=\"font-size:24px;\" type=\"text\" value=\"<?php echo htmlspecialchars($NomeTorneo); ?>\">";
+//echo"<input id=\"input-torneo\" name=\"torneo\" size=\"18\" style=\"font-size:24px;\" type=\"text\" value=\"htmlspecialchars($NomeTorneo)\">";
 
 echo"
 </td>
 <tr align=\"center\">
 <td colspan=\"3\" bgcolor=\"#FFFF00\" style=\"font-size:24px;\" align=\"center\"><strong>Num Tavolo</strong></td>
-</tr>
+</tr>";
+FormTorneoChiuso:
+
+echo"
 <tr align=\"center\" >
 
 <td width:15% bgcolor=\"yellow\" style=\"vertical-align: top;\">
@@ -260,44 +272,40 @@ echo"
 	<input style=\"background-color: lightgrey;font-size:16px; display: inline;\" name=\"action\" type=\"submit\" value=\"Home\">
 
 
-</td>
+</td>";
+if($NumCoppie > 0) {
+	echo"
+	<td width:70%  bgcolor=\"yellow\">
+	<select id=\"tavoli-select\" name=\"tavolo\" style=\"font-size:24px; width:80px;\">";
+		
+			for ($k=1; $k<=$NumCoppie/2 ; $k++) {        	 
+				echo  "<option  value='$k' >$k</option>";
+				;
+			}
 
-<td width:70%  bgcolor=\"yellow\">
-<select id=\"tavoli-select\" name=\"tavolo\" style=\"font-size:24px; width:80px;\">";
-	   
-   	    for ($k=1; $k<=$NumCoppie/2 ; $k++) {        	 
-              echo  "<option  value='$k' >$k</option>";
-			  ;
-    	}
+	echo "</select>		  
+	</td>
 
-echo "</select>		  
-</td>
+	<td width:15% bgcolor=\"yellow\" style=\"vertical-align: top;\">
+		<body style=\"text-align: right;\"><input style=\"background-color: powderblue;font-size:16px;\" name=\"action\" type=\"submit\" value=\"  Vai  \"></body>
+	</td>";
 
-<td width:15% bgcolor=\"yellow\" style=\"vertical-align: top;\">
-	<body style=\"text-align: right;\"><input style=\"background-color: powderblue;font-size:16px;\" name=\"action\" type=\"submit\" value=\"  Vai  \"></body>
-</td>
-
+}
+echo"
 </tr>
 
 </tbody>
 </table>
-
 	
 <br>
-
-	<br>
-	<br>
+<br>
+<br>
 
 ";
-//<div  align=\"center\">
-//<input style=\"background-color: powderblue;font-size:16px;\" name=\"action\" type=\"submit\" value=\"Vai\">
-//</div>
-//</table>
 
 //***************************************************************************
 //		cerca IL TORNEO CHIUSO CON ID MAGGIORE	/  data inizio maggiore															 
 //***************************************************************************
-
     	//$sql= "SELECT * FROM `brdg_cop_tornei` WHERE `ID_torneo`=(SELECT MAX(ID_torneo)  FROM `brdg_cop_tornei` WHERE `Stato`=1)";
     	$sql= "SELECT * FROM `brdg_cop_tornei` WHERE `Inizio`=(SELECT MAX(Inizio)  FROM `brdg_cop_tornei` WHERE `Stato`=1)";
     	$dati = $connessione->query($sql); 

@@ -4,13 +4,13 @@ include "dbConnessione.php";
 echo "<body bgcolor=\"green\">";
 
 //  RICEVE IL PARAMETRO TURNO IN ESAME
-	$azione = $_POST['action'];
-	$NomeTorneo= $_GET['torneo'];
-	$turnoOsservato= $_GET['turno'];
+	$azione = $_POST['action'] ?? NULL;
+	$NomeTorneo= $_GET['torneo'] ?? NULL;
+	$turnoOsservato= $_GET['turno'] ?? NULL;
 	// riceve da se stesso il tavolo
-	$Tavolo= $_POST['tavolo'];
-	$Tavolo_1= $_POST['tavolo_1'];
-	$TurnoNuovo= $_POST['turno'];
+	$Tavolo= $_POST['tavolo'] ?? NULL;
+	$Tavolo_1= $_POST['tavolo_1'] ?? NULL;
+	$TurnoNuovo= $_POST['turno'] ?? NULL;
 //echo" Tavolo ".$Tavolo;
 //echo"<br>";
 	if($TurnoNuovo)  {

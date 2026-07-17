@@ -26,9 +26,6 @@ error_reporting(E_ALL);
 	<link rel="stylesheet" href="css/skeleton.css">
 	<link rel="stylesheet" href="css/layout.css">
 
-<script>
-sessionStorage.setItem('urlProvenienza', window.location.href);	
-</script>
 
 <style>
 		#decimal-input {
@@ -117,7 +114,6 @@ sessionStorage.setItem('urlProvenienza', window.location.href);
     padding: 2px;
     text-align: center;
     font-weight: bold;
-    font-size: 16px;      
 }
 
 /* Gestione responsive dei select interni alla tabella */
@@ -231,6 +227,8 @@ include_once "dbConnessione.php";
 	$MostraSpostamentiFatti= false; 
 	$TurnoInizio = 0;
 	$ID_torneo  = 0;
+	$ColoreBoard = "grey";
+
 
 	
 //  	SERVE ANCHE PER COLORARE VERDE O ROSSO LE COPPIE
@@ -313,16 +311,21 @@ include_once "dbConnessione.php";
 	$NT=	 4;
     
 	$azione = $_POST['action'] ?? NULL;
-    //$azione = $_POST['action'];
 //echo "azione: ".$azione ;
 //echo  "<br>";
 
+	if($azione=="Home") {
+		header("Location: ".$home_pages);
+	    exit();
+	} 
+
+
     if($azione!=NULL)  { 
 		//  L'ORIGINE E' IL MODULO "ACCESSO"  OPPURE QUESTO STESSO MODULO ("INPUT SCORES") con varie azioni
-	    $torneo = $_POST['torneo'] ?? NULL;
+	    $torneo = $_POST['torneo'] ?? "     ";
 	    $TorneoChiuso = $_POST['torneo_chiuso'] ?? NULL;
 		$turno= $_POST['NumTurno'] ?? NULL;
-		$NumTavolo = $_POST['tavolo'] ?? NULL;
+		$NumTavolo = $_POST['tavolo'] ?? 1;
 		//$Punti = $_POST['punti'] ?? NULL;   // sistema di punteggio   
 		$Punti = $_POST['score_calcolato'] ?? NULL;    
 		
@@ -386,7 +389,7 @@ echo  "<br>";
 		//  AZIONE NULLA: L'ORIGINE E'  "ALTRI RISULTATI", 					(torneo in fase di gioco)
 		//  oppure  "controllo Turni"
 		//  oppure    "CLASSIFICA", "RISULTATI", "VEDI SCORES", "VEDI BOARDS"  	(torneo finito o chiuso)
-        $torneo = $_GET['NomeTorneo'];
+        $torneo = $_GET['NomeTorneo'] ?? "     ";
    	    $turno= $_GET['NumTurno'];
 	    $NumTavolo = $_GET['tavolo'];
 	    $orig = $_GET['orig'];
@@ -461,7 +464,7 @@ echo  "<br>";
    	$dati = $connessione->query($sql);
 	if(!$dati) exit("<h1 style=\"background-color:yellow;\"><b><center>Il TORNEO '". $torneo."' non esiste</center></b></h1>");
    	$row = $dati->fetch_assoc(); 
-   	$ID_torneo= $row['ID_torneo'];
+   	$ID_torneo= $row['ID_torneo'] ?? NULL;
    	if (!is_numeric($ID_torneo)) {
 		// chiusura della connessione
 		$connessione->close();
@@ -470,15 +473,15 @@ echo  "<br>";
 		//echo"</script>";
 		$azione= "<-";
 	}
-	$BoardsXturno= $row['BoardsXturno'];
-	$NumTurni= $row['Turni'];
-	$Stato= $row['Stato'];
-	$Tipo= $row['Tipo'];
-	$Ntavoli= $row['Tavoli'];
+	$BoardsXturno= $row['BoardsXturno'] ?? 0;
+	$NumTurni= $row['Turni'] ?? 0;
+	$Stato= $row['Stato'] ?? 0;
+	$Tipo= $row['Tipo'] ?? 0;
+	$Ntavoli= $row['Tavoli'] ?? 0;
 
 	//  RILETTURA  DEL TURNO PER VEDERE SE E' STATO AGGIORNATO
 	// 
-	$TurnoAttuale= $row['TurnoAttuale'];
+	$TurnoAttuale= $row['TurnoAttuale'] ?? 0;
 //echo "TurnoAttuale= ".$TurnoAttuale ;
 //echo  "<br>";
 //echo "turno= ".$turno ;
@@ -508,7 +511,7 @@ echo  "<br>";
 //**********************************************************************************	
 //********************   CONTROLLA SE CI SONO TUTTI I RISULTATI   ******************
 //**********************************************************************************	
-	
+if($ID_torneo)	{
 	$sql="SELECT COUNT(*) FROM `brdg_cop_scores` WHERE `torneoID`=$ID_torneo  and `score`IS NULL";
 	$dati= $connessione->query($sql);
 	if(!$dati) exit("<h1 style=\"background-color:yellow;\"><b><center>Il TORNEO con ID: \"". $ID_torneo."\" non esiste</center></b></h1>");
@@ -519,7 +522,9 @@ echo  "<br>";
 	}else{
 		$TorneoFinito= false;
 	}	
-
+}else{
+	exit("<h1 style=\"background-color:yellow;\"><b><center>Il TORNEO NON ESISTE</center></b></h1>");
+}
 //**********************************************************************************	
 //******************   CONTROLLI                   *********************************	
 //**********************************************************************************	
@@ -585,7 +590,8 @@ echo  "<br>";
 	$row = $dati->fetch_assoc();
 	if (!$row) {
 		$connessione->close();		
-  		exit( "<b><center>TORNEO o TURNO NON CORRETTI</center></b>");
+  		//exit( "<b><center>TORNEO NON CORRETTO o NON GIOCATO</center></b>");
+		exit("<h1 style=\"background-color:yellow;\"><b><center>TORNEO NON CORRETTO o NON GIOCATO</center></b></h1>");
 	}
 	$NumCoppiaNS= $row['coppiaNS'];	
 	$NumCoppiaEW= $row['coppiaEW'];	
@@ -599,14 +605,16 @@ echo  "<br>";
 	}
 	if ($kboard!=$BoardsXturno) {
 		$connessione->close();		
-		exit( "<b><center>NON TORNA IL NUM DEI BOARRDS</center></b>");
+		//exit( "<b><center>NON TORNA IL NUM DEI BOARRDS</center></b>");
+		exit("<h1 style=\"background-color:yellow;\"><b><center>NON TORNA IL NUM DEI BOARRDS</center></b></h1>");
 	}
      //******************************
 	//  CERCA I COMPONENTI DELLA COPPIA  IN  NS
      //******************************
 	$sql="SELECT * FROM `brdg_cop_coppie` WHERE `torneoID`=$ID_torneo  AND `coppiaID`= $NumCoppiaNS" ;	
 	$dati = $connessione->query($sql);
-	if(!$dati) exit("<b><center>Errore ricerca Coppia NS</center></b>");
+	if(!$dati) exit("<h1 style=\"background-color:yellow;\"><b><center>ERRORE NELLA RICERCA DELLA COPPIA NS</center></b></h1>");
+		//exit("<b><center>Errore ricerca Coppia NS</center></b>");
 	$row = $dati->fetch_assoc();		
 	$NumNomeN= $row['nome1ID'];
 	$NumNomeS= $row['nome2ID'];		
@@ -625,7 +633,8 @@ echo  "<br>";
      //******************************
 	$sql="SELECT * FROM `brdg_cop_coppie` WHERE `torneoID`=$ID_torneo  AND `coppiaID`= $NumCoppiaEW" ;
 	$dati = $connessione->query($sql);
-	if(!$dati) exit("<b><center>Errore ricerca Coppia EW</center></b>");
+	if(!$dati) exit("<h1 style=\"background-color:yellow;\"><b><center>ERRORE NELLA RICERCA DELLA COPPIA EW</center></b></h1>");
+		//exit("<b><center>Errore ricerca Coppia EW</center></b>");
 	$row = $dati->fetch_assoc(); 
 	$NumNomeE= $row['nome1ID'];
 	$NumNomeW= $row['nome2ID'];	
@@ -657,11 +666,13 @@ echo  "<br>";
 //echo $sql ;
 //echo  "<br>";
 		$dati= $connessione->query($sql); 
-		if(!$dati) exit("<b><center>Errore ricerca coppia nel turno successivo</center></b>");
+		if(!$dati) exit("<h1 style=\"background-color:yellow;\"><b><center>ERRORE RICERCA COPPIA TURNO SUCC.</center></b></h1>");
+			//exit("<b><center>Errore ricerca coppia nel turno successivo</center></b>");
 		$row = $dati->fetch_assoc();
 		if (!$row) {
 			$connessione->close();		
-			exit( "<b><center>TORNEO o TURNO NON CORRETTI</center></b>");
+			exit("<h1 style=\"background-color:yellow;\"><b><center>TORNEO o TURNO NON CORRETTI</center></b></h1>");
+			//exit( "<b><center>TORNEO o TURNO NON CORRETTI</center></b>");
 		}
 		$tavoloSucNS= $row['tavolo'];
 		
@@ -683,11 +694,13 @@ echo  "<br>";
 //echo $sql ;
 //echo  "<br>";
 		$dati= $connessione->query($sql); 
-		if(!$dati) exit("<b><center>Errore ricerca coppia nel turno successivo</center></b>");
+		if(!$dati) exit("<h1 style=\"background-color:yellow;\"><b><center>ERRORE RICERCA COPPIA TURNO SUCC.</center></b></h1>");
+			//exit("<b><center>Errore ricerca coppia nel turno successivo</center></b>");
 		$row = $dati->fetch_assoc();
 		if (!$row) {
 			$connessione->close();		
-			exit( "<b><center>TORNEO o TURNO NON CORRETTI</center></b>");
+			exit("<h1 style=\"background-color:yellow;\"><b><center>TORNEO o TURNO NON CORRETTI</center></b></h1>");
+			//exit( "<b><center>TORNEO o TURNO NON CORRETTI</center></b>");
 		}
 		$tavoloSucEW= $row['tavolo'];
 		
@@ -723,7 +736,8 @@ echo  "<br>";
 	$dati= $connessione->query($sql); 
 	if(!$dati) {
 		$connessione->close();
-		exit("<b><center>Errore ricerca boards</center></b>");				
+		exit("<h1 style=\"background-color:yellow;\"><b><center>ERRORE RICERCA BOARDS</center></b></h1>");
+		//exit("<b><center>Errore ricerca boards</center></b>");				
 	}
 	$row = $dati->fetch_assoc();
 	$kboard=1;
@@ -744,12 +758,13 @@ echo  "<br>";
 	   $msg= "TOCCA IL N. DEL BOARD PER INSERIRE IL CONTRATTO";
 	   $azione= "VaiGioca";
 	}   
-
+/*
 	if($azione=="Home") {
-	   header("Location: \..");
+		header("Location: ".$home_pages);
+		//header("Location: \..");
 	   exit();
 	} 
-		
+*/		
 
 //  AZIONI PROVENIENTI DALL INTERNO
 	if($azione=="I" && $MP_NS[1]==NULL && $MP_EW[1]==NULL) {
@@ -792,12 +807,14 @@ echo  "<br>";
 //echo $sql ;
 //echo  "<br>";
 					$dati= $connessione->query($sql); 
-					if(!$dati) exit("<b><center>Errore ricerca coppia nel turno - avv</center></b>");
+					if(!$dati) 	exit("<h1 style=\"background-color:yellow;\"><b><center>Errore ricerca coppia nel turno - avv</center></b></h1>");
+						//exit("<b><center>Errore ricerca coppia nel turno - avv</center></b>");
 					
 					$row = $dati->fetch_assoc();
 					if (!$row) {
-						$connessione->close();		
-						exit( "<b><center>TORNEO o TURNO NON CORRETTI</center></b>");
+						$connessione->close();
+						if(!$dati) 	exit("<h1 style=\"background-color:yellow;\"><b><center>TORNEO o TURNO NON CORRETTI</center></b></h1>");
+							//exit( "<b><center>TORNEO o TURNO NON CORRETTI</center></b>");
 					}
 					$NumCoppiaNS= $row['coppiaNS'];	
 					$NumCoppiaEW= $row['coppiaEW'];	
@@ -810,15 +827,17 @@ echo  "<br>";
 						$row = $dati->fetch_assoc();	
 					}
 					if ($kboard!=$BoardsXturno) {
-						$connessione->close();		
-						exit( "<b><center>NON TORNA IL NUM DEI BOARRDS</center></b>");
+						$connessione->close();					 	
+						exit("<h1 style=\"background-color:yellow;\"><b><center>NON TORNA IL NUM DEI BOARRDS</center></b></h1>");
+						//exit( "<b><center>NON TORNA IL NUM DEI BOARRDS</center></b>");
 					}
 					 //******************************
 					//  CERCA I COMPONENTI DELLA COPPIA  IN  NS
 					 //******************************
 					$sql="SELECT * FROM `brdg_cop_coppie` WHERE `torneoID`=$ID_torneo  AND `coppiaID`= $NumCoppiaNS" ;	
 					$dati = $connessione->query($sql);
-					if(!$dati) exit("<b><center>Errore ricerca Coppia NS</center></b>");
+					if(!$dati) 	exit("<h1 style=\"background-color:yellow;\"><b><center>Errore ricerca coppia NS</center></b></h1>");
+					//if(!$dati) exit("<b><center>Errore ricerca Coppia NS</center></b>");
 					$row = $dati->fetch_assoc();		
 					$NumNomeN= $row['nome1ID'];
 					$NumNomeS= $row['nome2ID'];		
@@ -837,7 +856,8 @@ echo  "<br>";
 					 //******************************
 					$sql="SELECT * FROM `brdg_cop_coppie` WHERE `torneoID`=$ID_torneo  AND `coppiaID`= $NumCoppiaEW" ;
 					$dati = $connessione->query($sql);
-					if(!$dati) exit("<b><center>Errore ricerca Coppia EW</center></b>");
+					if(!$dati) 	exit("<h1 style=\"background-color:yellow;\"><b><center>Errore ricerca coppia EW</center></b></h1>");
+					//if(!$dati) exit("<b><center>Errore ricerca Coppia EW</center></b>");
 					$row = $dati->fetch_assoc(); 
 					$NumNomeE= $row['nome1ID'];
 					$NumNomeW= $row['nome2ID'];	
@@ -944,10 +964,10 @@ echo  "<br>";
 		// LEGGE IL CONTRATTO NEL DATABASE
 		$dati= $connessione->query("SELECT * FROM `brdg_cop_scores` WHERE `torneoID`=$ID_torneo AND  `turno`=$turno AND  `board`=$boardAtt AND  `tavolo`=$NumTavolo");
 		$row = $dati->fetch_assoc(); 
-		$Contratto_= $row['Contratto'];
-		$Da= $row['GiocatoDa'];
-		$prese= $row['Prese'];
-		$Attacco= $row['Attacco'];
+		$Contratto_= $row['Contratto'] ?? "     ";
+		$Da= $row['GiocatoDa'] ?? " ";
+		$prese= $row['Prese'] ?? 0;
+		$Attacco= $row['Attacco'] ?? "     ";
 		
 		//**************************
 	//echo "Contratto_= ".$Contratto_ ;
@@ -1045,10 +1065,10 @@ exit();
 
 	if($azione=="<-"){
 		if($orig == "admin")  {
-			header("Location:".$home_proc."/TorneoCopControllo.php?torneo=".$torneo."&turno=".$turno);
+			header("Location: TorneoCopControllo.php?torneo=".$torneo."&turno=".$turno);
 			exit();
 		}else{	
-			header("Location:".$home_proc."/TorneoCopAccessoContrattoTav.php?Torneo=$torneo");
+			header("Location: TorneoCopAccessoContrattoTav.php?Torneo=$torneo");
 			exit();
 		}
 	}
@@ -1248,7 +1268,7 @@ noOK:
 
 //  *****************************************************************************
 
-	if($azione=="Vedi altri risultati") {
+if($azione=="Vedi altri risultati") {
 //echo "TurnoInizio   ". $TurnoInizio ;
 //echo  "<br>";	
 		if($TurnoInizio) {
@@ -1262,14 +1282,12 @@ noOK:
 	}
 
 //  *****************************************************************************
-/*
-if($azione=="Vedi foto") {
+    if($azione=="Vedi foto") {
 
 			header("Location:".$home_archive."/VediFoto.php?torneo=$torneo&board=$boardAtt&turno=$turno&tavolo=$NumTavolo");
 			exit();
 			//  *****************************************************************************
 	}
-*/	
 //  *****************************************************************************
 
 
@@ -1626,15 +1644,15 @@ echo  "<br>";
 	$dati= $connessione->query($sql); 
 	if(!$dati) {
 		$connessione->close();
-		exit("<b><center>Errore ricerca risultato</center></b>");				
+		exit("<h1 style=\"background-color:yellow;\"><b><center>Errore ricerca risultati</center></b></h1>");
+		//exit("<b><center>Errore ricerca risultato</center></b>");				
 	}
 	$row = $dati->fetch_assoc();
 	$kboard=1;
 	
 	$minuti= 0 ;
 	$secondi= -1 ;
-	
-	
+		
 	while($row)  {
 ?>		
 		<tr align="center" >
@@ -1715,8 +1733,8 @@ echo  "<br>";
 ?>
 			<td width="62px" bgcolor="<?php echo $ColoreBoard;?>"  align="center" style="padding: 2px;"> 
    
-		<?php 	if($Board==$boardAtt) { ?>
-				<input  style="width: 56px;background-color:yellow;font-size:36px;vertical-align: middle;" name="action" type="submit" value= <?php echo $Board;?> >
+<?php 			if($Board==$boardAtt) { ?>
+					<input  style="width: 56px;background-color:yellow;font-size:36px;vertical-align: middle;" name="action" type="submit" value= <?php echo $Board;?> >
 <?php			
 			 //******************************
 			// CONTROLLA SE E' PRESENTE LA FOTO DELLA BOARD ATTUALE
@@ -2074,7 +2092,7 @@ risultati:
 //*************************************************************************	
 //*************************************************************************	
 //*************************************************************************	
-//***************** MASCHERA DI INSERIMENTO CONTRATTO **********************	
+//***************** MASCHERA DI NSERIMENTO CONTRATTO **********************	
 //*************************************************************************	
 //*************************************************************************	
 //*************************************************************************	
@@ -2092,10 +2110,10 @@ modulo:
 			$dati= $connessione->query($sql);		
 			if($dati) {			
 				$row = $dati->fetch_assoc(); 
-				$Contratto_= $row['Contratto'];
-				$Da= $row['GiocatoDa'];
-				$prese= $row['Prese'];
-				$Attacco= $row['Attacco'];
+				$Contratto_= $row['Contratto'] ?? "     ";
+				$Da= $row['GiocatoDa'] ?? "     ";
+				$prese= $row['Prese'] ?? 0;
+				$Attacco= $row['Attacco'] ?? "     ";
 				
 				//**************************
 //echo "Contratto_= ".$Contratto_ ;

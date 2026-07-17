@@ -61,13 +61,13 @@ echo"<body bgcolor=#55ee55 text=\"000000\">";
 //***************************************************************************
 include "dbConnessione.php";
 
-	$azione = $_GET['azione'];
+	//$azione = $_GET['azione'];
 	$azione = "Iscrizione";
 //echo "azione = ".$azione 	;
 //echo"<br>";	
-	$VaiTorneo = $_POST['torneo'];
+	$VaiTorneo = $_POST['torneo'] ?? NULL;
 	//$NumGiocatore = $_POST['NumGiocatore'];
-	$Nome = $_POST['Nome'];
+	$Nome = $_POST['Nome'] ?? NULL;
 //echo "Nome = ".$Nome 	;
 //echo"<br>";	
 	if ($azione!=NULL) {
@@ -77,8 +77,8 @@ include "dbConnessione.php";
 		$k=1;
 		$trovato= false;
 		while($row) {	
-			$NomeTorneo= $row['NomeTorneo'];
-			$CheckTorneo = $_GET['Torneo'.$k];
+			$NomeTorneo= $row['NomeTorneo'] ?? NULL;
+			$CheckTorneo = $_GET['Torneo'.$k] ?? NULL;
 //echo"Nome	".$NomeTorneo	;	
 //echo"CheckTorneo	".$CheckTorneo	;	
 //echo"<br>";

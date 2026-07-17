@@ -62,12 +62,12 @@ INSERIMENTO COPIE
 include "dbConnessione.php";
 
 
-	$azione = $_POST['action'];
+	$azione = $_POST['action'] ?? NULL;
 //echo "azione=  ".$azione;			   
 //echo "<br>";
 
-	$NomeA= $_POST['NomeA'];
-	$NomeB= $_POST['NomeB'];
+	$NomeA= $_POST['NomeA'] ?? NULL;
+	$NomeB= $_POST['NomeB'] ?? NULL;
 	//$Telefono= $_POST['Telefono'];
 	//$Mail= $_POST['Mail'];
 	//$Associazione= $_POST['Associazione'];
@@ -75,8 +75,8 @@ include "dbConnessione.php";
 
   //  IL CONTROLLO ARRIVA DA ISCRIZIONE 
   
-	$torneo= $_GET['torneo'];
-	$scelta= $_GET['scelta'];
+	$torneo= $_GET['torneo'] ?? NULL;
+	$scelta= $_GET['scelta'] ?? NULL;
 	if($scelta=="ok") {
 		$azione = "Canc ID";		
 	}	
@@ -90,8 +90,8 @@ include "dbConnessione.php";
 		exit( "<body bgcolor=\"#f0e090\"><b><center>Il torneo non esiste</center></b></body>");
 	}
 	$row = $dati->fetch_assoc();
-	$ID_torneo= $row['ID_torneo'];
-	$turno= $row['TurnoAttuale'];	
+	$ID_torneo= $row['ID_torneo'] ?? NULL;
+	$turno= $row['TurnoAttuale'] ?? NULL;	
 /*
 echo "turno=  ".$turno;			   
 echo "<br>";

@@ -7,6 +7,8 @@ $NomeTorneo = $_GET['torneo'] ?? null;
 $Modifica = $_GET['modifica'] ?? 0;
 $msg = $_GET['msg'] ?? '';
 $error_msg = "";
+$Niscritti= 0;
+$Ntavoli= 0;
 
 $AzioneBottone="\"document.forms[0].submit()\"";	
 	//$msg="Nessuna azione per :";
@@ -41,12 +43,12 @@ if ($NomeTorneo == NULL) {
     $sql= "SELECT * FROM brdg_cop_tornei WHERE NomeTorneo=\"".$NomeTorneo."\"";
     $dati = $connessione->query($sql);
     $row = $dati->fetch_assoc(); 
-    $ID_torneo= $row['ID_torneo'];
-	$Ora = $row['Ora'];
-	$Turni = $row['Turni'];		
-	$BoardsXturno = $row['BoardsXturno'];
-	$Punteggio = $row['Punteggio'];
-	$Tipo = $row['Tipo'];
+    $ID_torneo= $row['ID_torneo'] ?? NULL;
+	$Ora = $row['Ora'] ?? NULL;
+	$Turni = $row['Turni'] ?? 0;		
+	$BoardsXturno = $row['BoardsXturno'] ?? 0;
+	$Punteggio = $row['Punteggio'] ?? 0;
+	$Tipo = $row['Tipo'] ?? 0;
 	
 	
 	
