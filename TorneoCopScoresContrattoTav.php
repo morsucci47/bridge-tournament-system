@@ -390,13 +390,13 @@ echo  "<br>";
 		//  oppure  "controllo Turni"
 		//  oppure    "CLASSIFICA", "RISULTATI", "VEDI SCORES", "VEDI BOARDS"  	(torneo finito o chiuso)
         $torneo = $_GET['NomeTorneo'] ?? "     ";
-   	    $turno= $_GET['NumTurno'];
-	    $NumTavolo = $_GET['tavolo'];
-	    $orig = $_GET['orig'];
-	    $boardAtt = $_GET['boardAtt'];
+   	    $turno= $_GET['NumTurno'] ?? NULL;
+	    $NumTavolo = $_GET['tavolo'] ?? NULL;
+	    $orig = $_GET['orig'] ?? NULL;
+	    $boardAtt = $_GET['boardAtt'] ?? NULL;
 
-		$TavoloAttExNS= $_GET['TavAttNS'];	
-		$TavoloAttExEW= $_GET['TavAttEW'];
+		$TavoloAttExNS= $_GET['TavAttNS'] ?? NULL;	
+		$TavoloAttExEW= $_GET['TavAttEW'] ?? NULL;
 /*	  
 echo "TavoloAttExNS: ".$TavoloAttExNS ;
 echo  "<br>";	   
@@ -1249,6 +1249,22 @@ noOK:
 		}
 
 		if(file_exists($home_archive."/upload/tornei/".$torneo."/Board_".$board_.".pbn") ){
+			echo "<script>";
+			echo "alert('ATTENZIONE: IL FILE PBN DEL BOARD N.".$boardAtt." ESISTE GIA\'');";
+			echo "</script>";
+		}
+
+		$url = $home_archive."/scrivi_pbn.php?torneo=".$torneo."&turno=".$turno."&board=".$boardAtt."&tavolo=".$NumTavolo."&dealer=".$Dealer."&vulner=".$Vulnerability;
+		echo "<script>";
+			// Salva l'URL corrente prima di spostarsi
+			echo"sessionStorage.setItem('urlProvenienza', window.location.href);";		
+			echo "window.location.href = '".$url."';"; // Reindirizzamento via JS
+		echo "</script>";
+		exit();
+
+
+/*
+		if(file_exists($home_archive."/upload/tornei/".$torneo."/Board_".$board_.".pbn") ){
 			$url = $home_archive."/scrivi_pbn.php?torneo=".$torneo."&turno=".$turno."&board=".$boardAtt."&tavolo=".$NumTavolo."&dealer=".$Dealer."&vulner=".$Vulnerability;
 			echo "<script>";
 			echo "alert('ATTENZIONE: IL FILE PBN DEL BOARD N.".$boardAtt." ESISTE GIA\'');";
@@ -1259,7 +1275,7 @@ noOK:
 			header("Location:".$home_archive."/scrivi_pbn.php?torneo=".$torneo."&turno=".$turno."&board=".$boardAtt."&tavolo=".$NumTavolo."&dealer=".$Dealer."&vulner=".$Vulnerability);
 			exit();
 		}
-
+*/
 	}
 
 		/*
