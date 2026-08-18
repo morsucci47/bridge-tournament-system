@@ -1,6 +1,6 @@
 <?php 
 
-// Questa procedura è inclusa in CalcClassifica
+// Questa procedura ï¿½ inclusa in CalcClassifica
 // 
 
 // DEFINIZIONI
@@ -119,7 +119,7 @@ echo "<br>" ;
 			$i= 0;
 			$Ngiocate= 0;
 			for($iCoppia=0; $iCoppia<$Ncoppie ; $iCoppia++)    {
-				if($iOrient==$RisMani[$ORIENT][$iCoppia])  {   			// tempScore può essere -1 !! 0 sta per all-pass
+				if($iOrient==$RisMani[$ORIENT][$iCoppia])  {   			// tempScore puï¿½ essere -1 !! 0 sta per all-pass
 					$tempScore[$i]= $RisMani[$PUNTIMANI][$iCoppia];
 					$tempCoppie[$i]= $iCoppia;
 //   !!!!!!   ATTENZIONE    MODIFICA IMPORTANTE A ALL PASS
@@ -156,8 +156,8 @@ echo "<br>" ;
 echo"coppia,orient, MP---> ".$tempCoppie[$i]." - ".$iOrient." - ".$tempPunti[$i] ;
 echo "<br>" ;
 */
-			// più uno per i punteggi uguali
-			// più due per i punteggi minori		
+			// piï¿½ uno per i punteggi uguali
+			// piï¿½ due per i punteggi minori		
 
 			for($i=0; $i<$NcoppieBRD ; $i++)  {   // CONTROLLARE NcoppieBRD
 				//  CASI PARTICOLARI 
@@ -176,7 +176,7 @@ echo "<br>" ;
 					$tempPunti[$i]= 0 ;							
 //   !!!!!!   ATTENZIONE    MODIFICA IMPORTANTE A ALL PASS
 				//}else if($tempScore[$i]==0)  {
-				//  = 0		  ALL PASS				: SI ASSEGNA 50% DEL TOP A CHI è PASSATO. SE UNA SOLA COPPIA HA GIOCATO, SI ASSEGNA TOP O ZERO A SECONDA	
+				//  = 0		  ALL PASS				: SI ASSEGNA 50% DEL TOP A CHI ï¿½ PASSATO. SE UNA SOLA COPPIA HA GIOCATO, SI ASSEGNA TOP O ZERO A SECONDA	
 				//	$tempPunti[$i]= $MPmax * 0.5 ;							
 				}else{
 					$tempPunti[$i]=0;	
@@ -271,6 +271,7 @@ echo "<br>" ;
 
     for($iCop=0; $iCop<$Ncoppie ; $iCop++)    {
         $temp=0;
+        $MPtemp=0;
 		$NboardsGiocate= 0;
         for($iBoard=0; $iBoard<$Nboards ; $iBoard++)    {
 /*

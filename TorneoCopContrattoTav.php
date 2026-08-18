@@ -128,6 +128,8 @@ $QUADRI= 1;
 $CUORI=  2;
 $PICCHE= 3;
 $NT=	 4;
+
+
 	
 // *******************************************************
 //		LETTURA DEI PARAMETRI
@@ -240,6 +242,17 @@ echo  "<br>";
 echo "Vulnerability= ".$Vulnerability ;
 echo  "<br>";
 */
+// *******************************************************
+//		CATTURA dell URL INIZIALE
+// *******************************************************
+	if($orig == "admin") {
+		echo "<script>";
+			// Salva l'URL corrente prima di spostarsi
+			echo"sessionStorage.setItem('urlProvenienza', window.location.href);";		
+			//echo "window.location.href = '".$url."';"; // Reindirizzamento via JS
+		echo "</script>";
+	}
+
 
 
 //	******************************************************* 
@@ -402,6 +415,25 @@ echo  "<br>";
 			
 		// VA a input manuale		
 		// Controlla l' esistenza del file
+		if(file_exists($home_archive."/upload/tornei/".$NomeTorneo."/Board_".$board_.".pbn") ){
+			echo "<script>";
+			echo "alert('ATTENZIONE: IL FILE PBN DEL BOARD N.".$board." ESISTE GIA\'');";
+			echo "</script>";
+		}
+
+		$url = $home_archive."/scrivi_pbn.php?torneo=".$NomeTorneo."&turno=".$turno."&board=".$board."&tavolo=".$NumTavolo."&dealer=".$Dealer."&vulner=".$Vulnerability;
+
+		echo "<script>";
+			// Salva l'URL corrente prima di spostarsi
+			//echo"sessionStorage.setItem('urlProvenienza', window.location.href);";		
+			echo"sessionStorage.removeItem('urlProvenienza');";
+			echo "window.location.href = '".$url."';"; // Reindirizzamento via JS
+		echo "</script>";
+		exit();
+	}
+
+
+/*
 
 		if(file_exists($home_archive."/upload/tornei/".$NomeTorneo."/Board_".$board_.".pbn") ){
 			$url = $home_archive."/scrivi_pbn.php?torneo=".$NomeTorneo."&turno=".$turno."&board=".$board."&tavolo=".$NumTavolo."&dealer=".$Dealer."&vulner=".$Vulnerability;
@@ -414,9 +446,8 @@ echo  "<br>";
 			header("Location:".$home_archive."/scrivi_pbn.php?torneo=".$NomeTorneo."&turno=".$turno."&board=".$board."&tavolo=".$NumTavolo."&dealer=".$Dealer."&vulner=".$Vulnerability);
 			exit();
 		}
+*/
 
-
-	}
 
 //  *****************************************************************************
     if($azione=="Gli altri risultati") {
@@ -705,9 +736,8 @@ echo "<table align=\"center\" width=\"300px\" >";
 	echo"</tr>";
 	
 	echo "</tbody>";
-	
-	echo "<form action=\"TorneoCopContrattoTav.php?torneoID=$torneoID&turno=$turno&IDgio=$IDgio&posGio=$posGio&board=$board
-					&punti=$Punti&tavolo=$NumTavolo&coppiaNS=$NumCoppiaNS&coppiaEW=$NumCoppiaEW&orig=$orig\" method=\"post\">";
+	//echo "<form action=\"TorneoCopContrattoTav.php?torneo=$torneoID&turno=$turno&tavolo=$NumTavolo&coppiaNS=$NumCoppiaNS&coppiaEW=$NumCoppiaEW&board=$board&orig=admin\" method=\"post\">";
+	echo "<form action=\"TorneoCopContrattoTav.php?torneoID=$torneoID&turno=$turno&IDgio=$IDgio&posGio=$posGio&board=$board&punti=$Punti&tavolo=$NumTavolo&coppiaNS=$NumCoppiaNS&coppiaEW=$NumCoppiaEW&orig=$orig\" method=\"post\">";
 	
 		echo "<tbody bgcolor=\"f0e090\">";
 		echo"<tr >";

@@ -56,7 +56,7 @@
 
 include_once "dbConnessione.php";
 	  $Punt=0;	
-      $azione = $_POST['action'];
+      $azione = $_POST['action'] ?? NULL;
       if($azione=="MP") {
 	     $Punt= 1;
       }
@@ -71,9 +71,9 @@ include_once "dbConnessione.php";
       }   
 
 //  RICEVE TORNEO E IL PARAMETRO TURNO IN ESAME
-	$NomeTorneo= $_GET['torneo'];
-	$NumTurno= $_GET['turno'];
-	$Origine= $_GET['orig'];
+	$NomeTorneo= $_GET['torneo'] ?? NULL;
+	$NumTurno= $_GET['turno'] ?? NULL;
+	$Origine= $_GET['orig'] ?? NULL;
 	if (!is_numeric($NumTurno)) {
 	    exit("Manca il numero del turno");
 	}	

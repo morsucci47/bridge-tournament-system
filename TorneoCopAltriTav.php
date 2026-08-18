@@ -34,30 +34,13 @@ td {
   vertical-align: middle;
   text-align: center;
 }
-
-.container-tabelle {
-  display: flex;
-  flex-direction: column;    
-  width: 100%;               
-  gap: 2px;                 
-  max-width: 800px;          
-  margin: 0 auto;            
-
-  background-color: #C0C0C0; 
-  border: 2px solid #A9A9A9; 
-  border-radius: 8px;        
-  padding: 2px;             
-  box-sizing: border-box;    
-}
-
 </style>
-
-
 <?php  
 
 // inclusione del file di connessione
 include_once "dbConnessione.php";
 
+	
 // *******************************************************
 //		LETTURA DEI PARAMETRI
 // *******************************************************
@@ -91,7 +74,7 @@ include_once "dbConnessione.php";
 	}
 	// si aggiunge una query del timestamp per evitare la cache
 	//$filename= '../WEBCAM/upload/tornei/'.$torneo.'/N_'.$board_.'.jpeg?r='.time();	
-	$filename= $home_archive.'/upload/tornei/'.$torneo.'/N_'.$board_.'.jpeg';	
+	$filename= './WEBCAM/upload/tornei/'.$torneo.'/N_'.$board_.'.jpeg';	
 
 	echo "filename: ".$filename;
 	echo  "<br>";
@@ -114,9 +97,6 @@ include_once "dbConnessione.php";
 	//echo  "<br>";
 
 //echo "<table  border=\"0\" >";
-
-echo"<div class=\"container-tabelle\">";
-
 echo"<div  align=\"center\"><strong><h3>Altri risultati</h3></strong></div>"; 
 echo "<br>";
 
@@ -127,6 +107,7 @@ echo "<br>";
 //  RISULTATI DEGLI ALTRI TAVOLI
 // *********************************************************
   
+//echo"<div class=\"container\">";
 
 echo "<table width=\"300px\" >";
 
@@ -171,11 +152,11 @@ echo "<tbody bgcolor=\"yellow\" style=\"font-size:24px;\">";
 			$coppiaEW_= $coppiaEW;
 		}
 	
-		$Contratto= $row['Contratto'];
-		$Da= $row['GiocatoDa'];
-		$Prese= $row['Prese'];
-		$Attacco= $row['Attacco'];
-		$score= $row['score'];
+		$Contratto= $row['Contratto'] ?? "     ";
+		$Da= $row['GiocatoDa'] ?? "  ";
+		$Prese= $row['Prese'] ?? 0;
+		$Attacco= $row['Attacco']?? "  ";
+		$score= $row['score'] ?? 0;
 		//  COLORAZIONE ROSSA
 		//<span style="color:red">♦  ♥</span>
 		$Cont= $Contratto[0];
@@ -229,7 +210,6 @@ echo "</table>";
 echo "</table>";
 
 
-
 //*******************************************************
 // ********************* TASTO RITORNO  ********************window.location.href = document.referrer;
 //history.go(-1);
@@ -237,8 +217,8 @@ echo "</table>";
 
 $connessione->close();
 
-$AzioneBottone1="window.location.href ='TorneoCopScoresContrattoTav.php?NomeTorneo=$torneo&NumTurno=$turno&tavolo=$NumTavolo&orig=AltriTav&TavAttNS=$TavoloAttualeNS&TavAttEW=$TavoloAttualeEW'; ";	
-$AzioneBottone2="window.location.href ='".$home_archive."/leggi_pbn.php?Torneo=$torneo&Board=$board&turno=$turno&tavolo=$NumTavolo';";	
+$AzioneBottone1=" \"window.location.href ='TorneoCopScoresContrattoTav.php?NomeTorneo=$torneo&NumTurno=$turno&tavolo=$NumTavolo&orig=AltriTav&TavAttNS=$TavoloAttualeNS&TavAttEW=$TavoloAttualeEW';\" ";	
+$AzioneBottone2=" \"window.location.href =' ../../WEBCAM/leggi_pbn.php?Torneo=$torneo&Board=$board&turno=$turno&tavolo=$NumTavolo';\" ";	
 	
 	
 //echo "AzioneBottone2: ".$AzioneBottone2;
@@ -257,16 +237,14 @@ $AzioneBottone2="window.location.href ='".$home_archive."/leggi_pbn.php?Torneo=$
 */
 
 ?>
-
-<br>
 <div align="center">
 	<span >
-         <button style="background-color:LightGray;text-align:center; font-size: 20px;" onclick= "<?php echo $AzioneBottone1; ?>" >Indietro</button>	  
+         <button style="background-color:LightGray;text-align:center; font-size: 20px;" onclick= <?php echo $AzioneBottone1; ?> >Indietro</button>	  
     </span>
 	&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
 	<span>
-         <button style="background-color:orange;text-align:center; font-size: 20px;" onclick= "<?php echo $AzioneBottone2; ?>" >Analisi</button>	  
+         <button style="background-color:orange;text-align:center; font-size: 20px;" onclick= <?php echo $AzioneBottone2; ?> >Analisi</button>	  
     </span> 
 </div>    
-
-</div>
+<br>
+<br>

@@ -159,13 +159,18 @@ var_dump ($columns[1]);
 echo"<br>";	
 */			
 			$Turno++;
-		
+
+			$Tavolo    = isset($columns[0]) ? strcompatta($columns[0]) : NULL;
+			$Boa       = isset($columns[1]) ? strcompatta($columns[1]) : NULL;
+			$CoppiaNS  = isset($columns[2]) ? strcompatta($columns[2]) : NULL;
+			$CoppiaEW  = isset($columns[3]) ? strcompatta($columns[3]) : NULL;			
+/*
 			$Tavolo= strcompatta($columns[0]) ?? NULL;
 		  	$Boa= strcompatta($columns[1]) ?? NULL;
 		  	$CoppiaNS= strcompatta($columns[2]) ?? NULL;
 		  	$CoppiaEW= strcompatta($columns[3]) ?? NULL;
 		
-/*	
+	
 echo"Tavolo= ".$Tavolo;
 echo"  ,Boa= ".$Boa;
 echo"  ,CoppiaNS= ".$CoppiaNS;

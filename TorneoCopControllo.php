@@ -24,14 +24,14 @@ echo "<body bgcolor=\"green\">";
 	$sql= "SELECT * FROM `brdg_cop_tornei` WHERE `NomeTorneo`= '".$NomeTorneo."'";
 	$dati = $connessione->query($sql);
 	$row = $dati->fetch_assoc(); 
-	$ID_torneo= $row['ID_torneo'];
-	$Tipo= $row['Tipo'];		
-	$Ntavoli= $row['Tavoli'];	
-	$NboardsXturno= $row['BoardsXturno'];		
+$ID_torneo= $row['ID_torneo'] ?? NULL;
+	$Tipo= $row['Tipo'] ?? NULL;		
+	$Ntavoli= $row['Tavoli'] ?? NULL;	
+	$NboardsXturno= $row['BoardsXturno'] ?? NULL;		
     if (!is_numeric($ID_torneo)) {
 		// chiusura della connessione
 		$connessione->close();
-		exit("<body bgcolor=\"#a0eea0\"><b><center>Il torneo \"". $torneo."\" non esiste</center></b></body>");
+		exit("<body bgcolor=\"#a0eea0\"><b><center>Il torneo \"". $NomeTorneo."\" non esiste</center></b></body>");
 	 }
 	 
 	//  ESEGUE LE AZIONI

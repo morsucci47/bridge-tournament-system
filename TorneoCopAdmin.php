@@ -268,19 +268,28 @@ if ($azione == NULL && $pswd == NULL) {
 //=================================================
 // IL CONTROLLO VIENE DAL FORM INTERNO -- GESTIONE DELLE AZIONI
 //=================================================
+
+
+if 	( $azione == "Cancellazione Turno"
+	||$azione == "Cancellazione TORNEO"
+	||$azione == "Chiusura"
+	||$azione == "Riapertura"
+	) {
+	//$NomeTorneo = $_GET['torneo'];
+	$sql = "SELECT * FROM `brdg_cop_tornei` WHERE `NomeTorneo`= '".$NomeTorneo."'";
+	$dati = $connessione->query($sql);
+	if ($dati->num_rows == 0) {
+		echo "<script>alert('ATTENZIONE: TORNEO NON ESISTENTE');</script>";
+		goto modulo;
+	}
+}
+
+
 if ($azione != NULL) {
-    if 	( $azione == "Cancellazione Turno"
-		||$azione == "Cancellazione TORNEO"
-		||$azione == "Chiusura"
-		||$azione == "Riapertura"
-		) {
+    if 	( $azione == "Cancellazione Turno"	) {
         //$NomeTorneo = $_GET['torneo'];
         $sql = "SELECT * FROM `brdg_cop_tornei` WHERE `NomeTorneo`= '".$NomeTorneo."'";
         $dati = $connessione->query($sql);
-		if ($dati->num_rows == 0) {
-	        echo "<script>alert('ATTENZIONE: TORNEO NON ESISTENTE');</script>";
-            goto modulo;
-        }
         $row = $dati->fetch_assoc(); 
         $ID_torneo = $row['ID_torneo'];
         $turnoAtt = $row['TurnoAttuale'];
